@@ -16,6 +16,9 @@ import ro.unibuc.hello.dto.InfoAvion;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 import ro.unibuc.hello.service.AvionService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -73,6 +76,69 @@ class AvionControllerTest {
 
         // Assert
         Assertions.assertEquals(result.getResponse().getContentAsString(), "Avion entity with the requested number not found.");
+    }
 
+    @Test
+    void test_getAllAvioane_oneFlight() throws Exception {
+        // Arrange
+        InfoAvion infoAvion = new InfoAvion("1: Doha -> Bucharest");
+        List<InfoAvion> infoAvionList_oneFlight= new ArrayList<InfoAvion>();
+        infoAvionList_oneFlight.add(infoAvion);
+
+        when(avionService.getAllAvioane()).thenReturn(infoAvionList_oneFlight);
+
+        // Act
+        MvcResult result = mockMvc.perform(get("/avion")
+                        .content(objectMapper.writeValueAsString(infoAvionList_oneFlight))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvionList_oneFlight));
+    }
+
+    @Test
+    void test_getAllAvioane_multipleFlights() throws Exception {
+        // Arrange
+        InfoAvion infoAvion1 = new InfoAvion("1: Doha -> Bucharest");
+        InfoAvion infoAvion2 = new InfoAvion("2: Viena -> Paris");
+        InfoAvion infoAvion3 = new InfoAvion("3: Male -> Buenos Aires");
+
+        List<InfoAvion> infoAvionList_multipleFlights= new ArrayList<InfoAvion>();
+        infoAvionList_multipleFlights.add(infoAvion1);
+        infoAvionList_multipleFlights.add(infoAvion2);
+        infoAvionList_multipleFlights.add(infoAvion3);
+
+        when(avionService.getAllAvioane()).thenReturn(infoAvionList_multipleFlights);
+
+        // Act
+        MvcResult result = mockMvc.perform(get("/avion")
+                        .content(objectMapper.writeValueAsString(infoAvionList_multipleFlights))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvionList_multipleFlights));
+    }
+
+    @Test
+    void test_getAllAvioane_noFlights() throws Exception {
+        // Arrange
+
+        List<InfoAvion> infoAvionList_noFlights= new ArrayList<InfoAvion>();
+
+        when(avionService.getAllAvioane()).thenReturn(infoAvionList_noFlights);
+
+        // Act
+        MvcResult result = mockMvc.perform(get("/avion")
+                        .content(objectMapper.writeValueAsString(infoAvionList_noFlights))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvionList_noFlights));
     }
 }
