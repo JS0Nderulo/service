@@ -22,7 +22,7 @@ public class AvionController {
 
     @GetMapping("/avion/{number}")
     @ResponseBody
-    public ResponseEntity<?> getAvion(@PathVariable("number") String number) throws EntityNotFoundException {
+    public ResponseEntity<?> getAvion(@PathVariable("number") String number)  {
         try {
             return ResponseEntity.ok().body(avionService.getAvionInfoByNumber(number));
         }
@@ -39,7 +39,7 @@ public class AvionController {
 
     @PostMapping("/avion")
     @ResponseBody
-    public ResponseEntity<?>  addAvion(@RequestBody Avion avion) throws EntityNotFoundException {
+    public ResponseEntity<?>  addAvion(@RequestBody Avion avion) {
         try {
             InfoAvion newAvion=avionService.addAvion(avion);
             return ResponseEntity.ok().body(newAvion);
@@ -51,7 +51,7 @@ public class AvionController {
 
     @DeleteMapping("/avion/{number}")
     @ResponseBody
-    public ResponseEntity<?> removeAvion(@PathVariable("number") String number) throws EntityNotFoundException {
+    public ResponseEntity<?> removeAvion(@PathVariable("number") String number)  {
         try {
             return ResponseEntity.ok().body(avionService.removeAvion(number));
         }
@@ -62,7 +62,7 @@ public class AvionController {
 
     @PutMapping("/avion/{number}")
     @ResponseBody
-    public ResponseEntity<?> updateAvion(@PathVariable("number") String number, @RequestBody Avion avion) throws EntityNotFoundException {
+    public ResponseEntity<?> updateAvion(@PathVariable("number") String number, @RequestBody Avion avion) {
         try {
             return ResponseEntity.ok().body(avionService.updateAvion(number, avion));
         }
