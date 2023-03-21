@@ -80,7 +80,6 @@ public class AvionServiceTest {
         Avion avion = new Avion("1","Doha","Bangkok");
         when(mockAvionRepository.findByNumber(any())).thenReturn(avion);
 
-
         try {
             // Act
             InfoAvion resInfoAvion = avionService.addAvion(avion);
@@ -89,6 +88,37 @@ public class AvionServiceTest {
             Assertions.assertEquals(ex.getClass(), DuplicateException.class);
             Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
         }
+    }
 
+
+    @Test
+    void test_removeAvion_returnsInfoAvion() throws Exception {
+        // Arrange
+        String number = "1";
+        Avion avion = new Avion("1", "Doha", "Bangkok");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+        when(mockAvionRepository.findByNumber(any())).thenReturn(avion);
+
+        // Act
+        InfoAvion resInfoAvion = avionService.removeAvion(number);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_removeAvion_entityNotFound() throws Exception {
+        // Arrange
+        String number = "1";
+        when(mockAvionRepository.findByNumber(number)).thenReturn(null);
+
+        try {
+            // Act
+            InfoAvion infoAvion = avionService.removeAvion(number);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), EntityNotFoundException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 1 was not found");
+        }
     }
 }
