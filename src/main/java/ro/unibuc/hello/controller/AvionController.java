@@ -69,7 +69,11 @@ public class AvionController {
         catch (EntityNotFoundException exception) {
             return ResponseEntity.ok().body(entityNotFoundExceptionMessage);
         }
+        catch (DuplicateException exception) {
+            return ResponseEntity.ok().body(duplicateExceptionMessage);
+        }
     }
+
 
     @GetMapping("/avionfilter")
     public ResponseEntity<?> getAvioaneByProperties(@RequestParam(name = "from",required = false) String from, @RequestParam(name = "to",required = false) String to) {
