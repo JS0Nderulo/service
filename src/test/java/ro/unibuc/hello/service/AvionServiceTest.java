@@ -9,8 +9,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.data.AvionRepository;
 import ro.unibuc.hello.dto.InfoAvion;
+import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -53,5 +55,40 @@ public class AvionServiceTest {
             Assertions.assertEquals(ex.getClass(), EntityNotFoundException.class);
             Assertions.assertEquals(ex.getMessage(), "Entity: 1 was not found");
         }
+    }
+
+    //TODO: getAllAvioane
+
+    @Test
+    void test_addAvion_returnsInfoAvion() throws Exception {
+        // Arrange
+        Avion avion = new Avion("1", "Doha", "Bangkok");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+        when(mockAvionRepository.save(any())).thenReturn(avion);
+
+        // Act
+        InfoAvion resInfoAvion = avionService.addAvion(avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_addAvion_whenAvionNumberIsDuplicate() throws Exception {
+
+        // Arrange
+        Avion avion = new Avion("1","Doha","Bangkok");
+        when(mockAvionRepository.findByNumber(any())).thenReturn(avion);
+
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.addAvion(avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), DuplicateException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
+        }
+
     }
 }
