@@ -10,19 +10,25 @@ import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.dto.InfoAvion;
+import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 import ro.unibuc.hello.service.AvionService;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 class AvionControllerTest {
@@ -60,6 +66,7 @@ class AvionControllerTest {
         // Assert
         Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvion));
     }
+    
 
     @Test
     void test_getAvion_entityNotFound() throws Exception {
@@ -141,4 +148,48 @@ class AvionControllerTest {
         // Assert
         Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvionList_noFlights));
     }
+
+    @Test
+    void test_addAvion() throws Exception {
+        // Arrange
+        Avion avion = new Avion("1","Doha","Bangkok");
+        InfoAvion infoAvion= new InfoAvion("1: Doha -> Bangkok");
+        when(avionService.addAvion(any())).thenReturn(infoAvion);
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/avion")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(avion))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flight").value(infoAvion.getFlight()))
+                .andExpect(status().isOk())
+                .andReturn();
+        
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvion));
+    }
+
+    @Test
+    void test_addAvion_duplicate() throws Exception {
+
+        // Arrange
+        Avion avion = new Avion("1","Doha","Bangkok");
+        String duplicateExceptionMessage = "An avion entity with the same number already exists so the state of the DB wasn't modified.";
+
+        when(avionService.addAvion(any())).thenThrow(new DuplicateException(avion.getNumber()));
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/avion")
+                        .content(objectMapper.writeValueAsString(avion))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(avion)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), duplicateExceptionMessage);
+
+    }
+
 }
