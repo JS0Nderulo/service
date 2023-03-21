@@ -230,4 +230,45 @@ class AvionControllerTest {
         Assertions.assertEquals(result.getResponse().getContentAsString(), entityNotFoundMessage);
     }
 
+    @Test
+    void test_updateAvion() throws Exception {
+        // Arrange
+        Avion avion = new Avion("1","New York","Denver");
+        InfoAvion infoAvion= new InfoAvion("1 : New York -> Denver");
+        when(avionService.updateAvion(any(), any())).thenReturn(infoAvion);
+
+        // Act
+        MvcResult result = mockMvc.perform(put("/avion/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(avion)))
+                .andExpect(jsonPath("$.flight").value(infoAvion.getFlight()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvion));
+    }
+
+    @Test
+    void test_updateAvion_entityNotFound() throws Exception {
+        // Arrange
+        String number = "100";
+        Avion avion = new Avion("100","Jakarta","Bangkok");
+        String entityNotFoundMessage = "Avion entity with the requested number was not found so the state of the DB wasn't modified.";
+
+        when(avionService.updateAvion(any(), any())).thenThrow(new EntityNotFoundException(number));
+
+        // Act
+        MvcResult result = mockMvc.perform(put("/avion/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(avion))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), entityNotFoundMessage);
+    }
+
+
 }
