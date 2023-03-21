@@ -270,5 +270,29 @@ class AvionControllerTest {
         Assertions.assertEquals(result.getResponse().getContentAsString(), entityNotFoundMessage);
     }
 
+    @Test
+    void test_fetchAvioaneByProperties() throws Exception {
+        // Arrange
+        String from=new String("Doha");
+        InfoAvion infoAvion1 = new InfoAvion("1: Doha -> Bucharest");
+        InfoAvion infoAvion2 = new InfoAvion("2: Doha -> Riyadh");
+        InfoAvion infoAvion3 = new InfoAvion("3: Doha -> Manila");
 
+        List<InfoAvion> infoAvionList_multipleFlights= new ArrayList<InfoAvion>();
+
+        infoAvionList_multipleFlights.add(infoAvion1);
+        infoAvionList_multipleFlights.add(infoAvion2);
+        infoAvionList_multipleFlights.add(infoAvion3);
+
+        when(avionService.fetchAvionByProperty(any(),any())).thenReturn(infoAvionList_multipleFlights);
+
+        // Act
+        MvcResult result = mockMvc.perform(get("/avionfilter")
+                        .param("from",from))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvionList_multipleFlights));
+    }
 }
