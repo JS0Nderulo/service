@@ -192,4 +192,42 @@ class AvionControllerTest {
 
     }
 
+    @Test
+    void test_deleteAvion() throws Exception {
+        // Arrange
+        Avion avion = new Avion("1","Doha","Bangkok");
+        InfoAvion infoAvion= new InfoAvion("1: Doha -> Bangkok");
+        when(avionService.removeAvion(any())).thenReturn(infoAvion);
+
+        // Act
+        MvcResult result = mockMvc.perform(delete("/avion/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(avion))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flight").value(infoAvion.getFlight()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), objectMapper.writeValueAsString(infoAvion));
+    }
+
+    @Test
+    void test_deleteAvion_entityNotFound() throws Exception {
+        // Arrange
+        String number = "100";
+        String entityNotFoundMessage = "Avion entity with the requested number was not found so the state of the DB wasn't modified.";
+
+        when(avionService.removeAvion(any())).thenThrow(new EntityNotFoundException(number));
+
+        // Act
+        MvcResult result = mockMvc.perform(delete("/avion/100")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), entityNotFoundMessage);
+    }
+
 }
