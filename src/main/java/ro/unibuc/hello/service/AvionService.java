@@ -65,7 +65,7 @@ public class AvionService {
         if (dupEntity != null) {
             throw new DuplicateException(avion.number);
         }
-        if(avion.getNumber()!=null && !entity.getNumber().equals(avion.getNumber())){
+        if(!entity.getNumber().equals(avion.getNumber())){
             entity.setNumber(avion.getNumber());
         }
         if(avion.getFrom()!=null && !entity.getFrom().equals(avion.getFrom())){

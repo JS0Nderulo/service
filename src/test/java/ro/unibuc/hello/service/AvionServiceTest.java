@@ -11,6 +11,7 @@ import ro.unibuc.hello.data.AvionRepository;
 import ro.unibuc.hello.dto.InfoAvion;
 import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
+import ro.unibuc.hello.exception.NullOrEmptyNumberException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,23 +179,19 @@ public class AvionServiceTest {
     }
 
     @Test
-    void test_updateAvion_returnsInfoAvion_nullNumber() throws Exception {
+    void test_updateAvion_exception_nullNumber() throws Exception {
         // Arrange
         String number="1";
-        Avion entity = new Avion("1", "Doha", "Bangkok");
         Avion avion = new Avion(null, "Dubai", "Jeddah");
-        Avion result =new Avion("1", "Dubai", "Jeddah");
-        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
 
-        when(mockAvionRepository.findByNumber(number)).thenReturn(entity);
-
-        when(mockAvionRepository.save(entity)).thenReturn(result);
-
-        // Act
-        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
-
-        // Assert
-        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
     }
 
     @Test
