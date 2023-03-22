@@ -120,6 +120,39 @@ public class AvionServiceTest {
 
 
     @Test
+    void test_addAvion_whenAvionNumberIsNull() throws Exception {
+
+        // Arrange
+        Avion avion = new Avion(null,"Doha","Bangkok");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.addAvion(avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
+    }
+
+    @Test
+    void test_addAvion_whenAvionNumberIsEmpty() throws Exception {
+
+        // Arrange
+        Avion avion = new Avion("","Doha","Bangkok");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.addAvion(avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
+    }
+
+
+    @Test
     void test_removeAvion_returnsInfoAvion() throws Exception {
         // Arrange
         String number = "1";
@@ -183,6 +216,22 @@ public class AvionServiceTest {
         // Arrange
         String number="1";
         Avion avion = new Avion(null, "Dubai", "Jeddah");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
+    }
+
+    @Test
+    void test_updateAvion_exception_emptyNumber() throws Exception {
+        // Arrange
+        String number="1";
+        Avion avion = new Avion("", "Dubai", "Jeddah");
 
         try {
             // Act
