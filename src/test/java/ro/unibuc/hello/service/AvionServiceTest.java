@@ -273,4 +273,31 @@ public class AvionServiceTest {
             Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
         }
     }
+
+    @Test
+    void test_fetchAvionByProperty() throws Exception {
+        // Arrange
+        List<Avion> listAvioane=new ArrayList<Avion>();
+        List<InfoAvion> listInfoAvion=new ArrayList<InfoAvion>();
+
+        Avion avion1 = new Avion("1", "Doha", "Bangkok");
+        Avion avion2 = new Avion("3", "Doha", "Bucharest");
+
+        InfoAvion infoAvion1 = new InfoAvion(String.format(avionTemplate, avion1.number, avion1.from, avion1.to));
+        InfoAvion infoAvion2 = new InfoAvion(String.format(avionTemplate, avion2.number, avion2.from, avion2.to));
+
+        listAvioane.add(avion1);
+        listAvioane.add(avion2);
+
+        listInfoAvion.add(infoAvion1);
+        listInfoAvion.add(infoAvion2);
+        when(mockAvionRepository.findAvionByProperties("Doha",null)).thenReturn(listAvioane);
+        // Act
+        List<InfoAvion> resInfoAvion = avionService.fetchAvionByProperty("Doha",null);
+
+        // Assert
+        Assertions.assertEquals(listInfoAvion.get(0).getFlight(), resInfoAvion.get(0).getFlight());
+        Assertions.assertEquals(listInfoAvion.get(1).getFlight(), resInfoAvion.get(1).getFlight());
+    }
+
 }
