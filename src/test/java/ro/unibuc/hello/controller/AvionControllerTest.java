@@ -18,6 +18,7 @@ import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.dto.InfoAvion;
 import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
+import ro.unibuc.hello.exception.NullOrEmptyNumberException;
 import ro.unibuc.hello.service.AvionService;
 
 import java.util.ArrayList;
@@ -189,6 +190,29 @@ class AvionControllerTest {
 
         // Assert
         Assertions.assertEquals(result.getResponse().getContentAsString(), duplicateExceptionMessage);
+
+    }
+
+    @Test
+    void test_addAvion_nullOrEmptyNumber() throws Exception {
+
+        // Arrange
+        Avion avion = new Avion("","Doha","Bangkok");
+        String nullOrEmptyExceptionMessage = "The provided number for the Avion entity is null or empty so the state of the DB wasn't modified.";
+
+        when(avionService.addAvion(any())).thenThrow(new NullOrEmptyNumberException());
+
+        // Act
+        MvcResult result = mockMvc.perform(post("/avion")
+                        .content(objectMapper.writeValueAsString(avion))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(avion)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), nullOrEmptyExceptionMessage);
 
     }
 
