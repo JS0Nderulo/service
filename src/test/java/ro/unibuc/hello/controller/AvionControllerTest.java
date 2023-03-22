@@ -316,6 +316,27 @@ class AvionControllerTest {
     }
 
     @Test
+    void test_updateAvion_nullOrEmptyNumber() throws Exception {
+        // Arrange
+        String number = "100";
+        Avion avion = new Avion(null,"Jakarta","Bangkok");
+        String nullOrEmptyNumberMessage = "The provided number for the Avion entity is null or empty so the state of the DB wasn't modified.";
+
+        when(avionService.updateAvion(any(), any())).thenThrow(new NullOrEmptyNumberException());
+
+        // Act
+        MvcResult result = mockMvc.perform(put("/avion/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(avion))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assert
+        Assertions.assertEquals(result.getResponse().getContentAsString(), nullOrEmptyNumberMessage);
+    }
+
+    @Test
     void test_fetchAvioaneByProperties() throws Exception {
         // Arrange
         String from=new String("Doha");
