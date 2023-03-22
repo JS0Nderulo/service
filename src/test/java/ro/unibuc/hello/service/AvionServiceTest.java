@@ -178,6 +178,65 @@ public class AvionServiceTest {
     }
 
     @Test
+    void test_updateAvion_returnsInfoAvion_nullNumber() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Doha", "Bangkok");
+        Avion avion = new Avion(null, "Dubai", "Jeddah");
+        Avion result =new Avion("1", "Dubai", "Jeddah");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
+
+        when(mockAvionRepository.findByNumber(number)).thenReturn(entity);
+
+        when(mockAvionRepository.save(entity)).thenReturn(result);
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_updateAvion_returnsInfoAvion_nullFrom() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Doha", "Bangkok");
+        Avion avion = new Avion("2", null, "Paris");
+        Avion result =new Avion("2", "Doha", "Paris");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
+
+        when(mockAvionRepository.findByNumber(number)).thenReturn(entity);
+
+        when(mockAvionRepository.save(entity)).thenReturn(result);
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_updateAvion_returnsInfoAvion_nullTo() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Doha", "Bangkok");
+        Avion avion = new Avion("2", "Colombo", null);
+        Avion result =new Avion("2", "Colombo", "Bangkok");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
+
+        when(mockAvionRepository.findByNumber(number)).thenReturn(entity);
+
+        when(mockAvionRepository.save(entity)).thenReturn(result);
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+    @Test
     void test_updateAvion_entityNotFound() throws Exception {
         // Arrange
         String number="1";
