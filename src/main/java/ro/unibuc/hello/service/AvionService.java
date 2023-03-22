@@ -38,7 +38,7 @@ public class AvionService {
     }
 
     public InfoAvion addAvion(Avion avion)  throws DuplicateException, NullOrEmptyNumberException {
-        if (avion.getNumber() == null) {
+        if (avion.getNumber() == null || avion.getNumber() == "") {
             throw new NullOrEmptyNumberException();
         }
         Avion dupEntity = avionRepository.findByNumber(avion.number);
@@ -59,7 +59,7 @@ public class AvionService {
     }
 
     public InfoAvion updateAvion(String number, Avion avion) throws NullOrEmptyNumberException {
-        if (avion.getNumber() == null) {
+        if (avion.getNumber() == null || avion.getNumber() == "") {
             throw new NullOrEmptyNumberException();
         }
         Avion entity = avionRepository.findByNumber(number);
