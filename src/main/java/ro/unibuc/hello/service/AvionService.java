@@ -7,6 +7,7 @@ import ro.unibuc.hello.data.AvionRepository;
 import ro.unibuc.hello.dto.InfoAvion;
 import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
+import ro.unibuc.hello.exception.NullOrEmptyNumberException;
 
 import java.util.*;
 
@@ -31,7 +32,10 @@ public class AvionService {
         return convertAvionToInfoAvion(entities);
     }
 
-    public InfoAvion addAvion(Avion avion)  throws DuplicateException {
+    public InfoAvion addAvion(Avion avion)  throws DuplicateException, NullOrEmptyNumberException {
+        if (avion.getNumber() == null || avion.getNumber() == "") {
+            throw new NullOrEmptyNumberException();
+        }
         Avion dupEntity = avionRepository.findByNumber(avion.number);
         if (dupEntity != null) {
             throw new DuplicateException(avion.number);
@@ -49,7 +53,10 @@ public class AvionService {
         return new InfoAvion(String.format(avionTemplate,entity.number, entity.from, entity.to));
     }
 
-    public InfoAvion updateAvion(String number, Avion avion) {
+    public InfoAvion updateAvion(String number, Avion avion) throws NullOrEmptyNumberException {
+        if (avion.getNumber() == null || avion.getNumber() == "") {
+            throw new NullOrEmptyNumberException();
+        }
         Avion entity = avionRepository.findByNumber(number);
         if (entity == null) {
             throw new EntityNotFoundException(number);
