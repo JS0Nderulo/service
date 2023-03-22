@@ -148,4 +148,70 @@ public class AvionServiceTest {
             Assertions.assertEquals(ex.getMessage(), "Entity: 1 was not found");
         }
     }
+
+    @Test
+    void test_updateAvion_returnsInfoAvion() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Doha", "Bangkok");
+        Avion avion = new Avion("2", "Singapore", "Brisbane");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        when(mockAvionRepository.findByNumber(number)).thenReturn(entity);
+
+        if(avion.getNumber()!=null && !entity.getNumber().equals(avion.getNumber())){
+            entity.setNumber(avion.getNumber());
+        }
+        if(avion.getFrom()!=null && !entity.getFrom().equals(avion.getFrom())){
+            entity.setFrom(avion.getFrom());
+        }
+        if(avion.getTo()!=null && !entity.getTo().equals(avion.getTo())){
+            entity.setTo(avion.getTo());
+        }
+        when(mockAvionRepository.save(entity)).thenReturn(avion);
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_updateAvion_entityNotFound() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Doha", "Bangkok");
+        Avion avion = new Avion("2", "Singapore", "Brisbane");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        when(mockAvionRepository.findByNumber(number)).thenReturn(null);
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), EntityNotFoundException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 1 was not found");
+        }
+    }
+
+    @Test
+    void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
+        // Arrange
+        String number="1";
+        Avion avion = new Avion("1", "Singapore", "Brisbane");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        when(mockAvionRepository.findByNumber(any())).thenReturn(avion);
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), DuplicateException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
+        }
+    }
 }
