@@ -8,6 +8,7 @@ import ro.unibuc.hello.dto.InfoAvion;
 import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
+import ro.unibuc.hello.exception.NullOrEmptyNumberException;
 import ro.unibuc.hello.service.AvionService;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class AvionController {
     private AvionService avionService;
     private static final String duplicateExceptionMessage = "An avion entity with the same number already exists so the state of the DB wasn't modified.";
     private static final String entityNotFoundExceptionMessage = "Avion entity with the requested number was not found so the state of the DB wasn't modified.";
+    private static final String nullOrEmptyNumberExceptionMessage = "The provided number for the Avion entity is null or empty so the state of the DB wasn't modified..";
 
     @GetMapping("/avion/{number}")
     @ResponseBody
@@ -47,6 +49,9 @@ public class AvionController {
         catch (DuplicateException exception) {
             return ResponseEntity.ok().body(duplicateExceptionMessage);
         }
+        catch (NullOrEmptyNumberException exception) {
+            return ResponseEntity.ok().body(nullOrEmptyNumberExceptionMessage);
+        }
     }
 
     @DeleteMapping("/avion/{number}")
@@ -71,6 +76,9 @@ public class AvionController {
         }
         catch (DuplicateException exception) {
             return ResponseEntity.ok().body(duplicateExceptionMessage);
+        }
+        catch (NullOrEmptyNumberException exception) {
+            return ResponseEntity.ok().body(nullOrEmptyNumberExceptionMessage);
         }
     }
 
