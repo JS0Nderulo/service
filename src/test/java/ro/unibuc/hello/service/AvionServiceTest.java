@@ -12,6 +12,9 @@ import ro.unibuc.hello.dto.InfoAvion;
 import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -57,7 +60,31 @@ public class AvionServiceTest {
         }
     }
 
-    //TODO: getAllAvioane
+    @Test
+    void test_getAllAvioane() {
+        // Arrange
+        List<Avion> listAvioane=new ArrayList<Avion>();
+        List<InfoAvion> listInfoAvion=new ArrayList<InfoAvion>();
+        Avion avion1 = new Avion("1", "Doha", "Bangkok");
+        Avion avion2 = new Avion("2", "Bangkok", "Tokyo");
+
+        InfoAvion infoAvion1 = new InfoAvion(String.format(avionTemplate, avion1.number, avion1.from, avion1.to));
+        InfoAvion infoAvion2 = new InfoAvion(String.format(avionTemplate, avion2.number, avion2.from, avion2.to));
+
+        listAvioane.add(avion1);
+        listAvioane.add(avion2);
+
+        listInfoAvion.add(infoAvion1);
+        listInfoAvion.add(infoAvion2);
+
+        when(mockAvionRepository.findAll()).thenReturn(listAvioane);
+
+            // Act
+        List<InfoAvion> resListInfoAvioane = avionService.getAllAvioane();
+        // Assert
+        Assertions.assertEquals(listInfoAvion.get(0).getFlight(), resListInfoAvioane.get(0).getFlight());
+        Assertions.assertEquals(listInfoAvion.get(1).getFlight(), resListInfoAvioane.get(1).getFlight());
+    }
 
     @Test
     void test_addAvion_returnsInfoAvion() throws Exception {
