@@ -1,10 +1,10 @@
 package ro.unibuc.hello.exception;
 
-public class NullOrEmptyException extends RuntimeException {
+public class NullOrEmptyNumberException extends RuntimeException {
 
     private static final String nullOrEmptyTemplate = "Entity: the provided number is null or empty!";
 
-    public NullOrEmptyException() {
+    public NullOrEmptyNumberException() {
         super(nullOrEmptyTemplate);
     }
 }
