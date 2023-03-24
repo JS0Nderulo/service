@@ -1,7 +1,6 @@
 package ro.unibuc.hello.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.data.AvionRepository;
@@ -10,7 +9,6 @@ import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 import ro.unibuc.hello.exception.NullOrEmptyNumberException;
 
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.*;
 
 @Component
@@ -18,10 +16,7 @@ public class AvionService {
 
     @Autowired
     private AvionRepository avionRepository;
-    @Autowired
-    MongoTemplate mongoTemplate;
 
-    private final AtomicLong counter = new AtomicLong();
     private static final String avionTemplate = "%s : %s -> %s";
 
     public InfoAvion getAvionInfoByNumber(String number) throws EntityNotFoundException {
@@ -70,7 +65,7 @@ public class AvionService {
         if (dupEntity != null) {
             throw new DuplicateException(avion.number);
         }
-        if(avion.getNumber()!=null && !entity.getNumber().equals(avion.getNumber())){
+        if(!entity.getNumber().equals(avion.getNumber())){
             entity.setNumber(avion.getNumber());
         }
         if(avion.getFrom()!=null && !entity.getFrom().equals(avion.getFrom())){

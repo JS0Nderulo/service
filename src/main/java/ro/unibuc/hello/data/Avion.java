@@ -43,11 +43,11 @@ public class Avion {
     }
 
 
-    @Override
+    /*@Override
     public String toString() {
         return String.format(
                 "Avion[number='%s', from='%s', to='%s']",
                 id, number, from, to);
     }
-
+*/
 }

@@ -20,11 +20,11 @@ public class AvionController {
     private AvionService avionService;
     private static final String duplicateExceptionMessage = "An avion entity with the same number already exists so the state of the DB wasn't modified.";
     private static final String entityNotFoundExceptionMessage = "Avion entity with the requested number was not found so the state of the DB wasn't modified.";
-    private static final String nullOrEmptyNumberExceptionMessage = "The provided number for the Avion entity is null or empty so the state of the DB wasn't modified..";
+    private static final String nullOrEmptyNumberExceptionMessage = "The provided number for the Avion entity is null or empty so the state of the DB wasn't modified.";
 
     @GetMapping("/avion/{number}")
     @ResponseBody
-    public ResponseEntity<?> getAvion(@PathVariable("number") String number) throws EntityNotFoundException {
+    public ResponseEntity<?> getAvion(@PathVariable("number") String number)  {
         try {
             return ResponseEntity.ok().body(avionService.getAvionInfoByNumber(number));
         }
@@ -41,7 +41,7 @@ public class AvionController {
 
     @PostMapping("/avion")
     @ResponseBody
-    public ResponseEntity<?> addAvion(@RequestBody Avion avion) throws EntityNotFoundException {
+    public ResponseEntity<?>  addAvion(@RequestBody Avion avion) {
         try {
             InfoAvion newAvion=avionService.addAvion(avion);
             return ResponseEntity.ok().body(newAvion);
@@ -56,7 +56,7 @@ public class AvionController {
 
     @DeleteMapping("/avion/{number}")
     @ResponseBody
-    public ResponseEntity<?> removeAvion(@PathVariable("number") String number) throws EntityNotFoundException {
+    public ResponseEntity<?> removeAvion(@PathVariable("number") String number)  {
         try {
             return ResponseEntity.ok().body(avionService.removeAvion(number));
         }
