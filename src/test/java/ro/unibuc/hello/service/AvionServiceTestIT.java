@@ -173,4 +173,117 @@ public class AvionServiceTestIT {
             Assertions.assertEquals(ex.getMessage(), "Entity: 11 was not found");
         }
     }
+    @Test
+    void test_updateAvion_returnsInfoAvion() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Bucharest", "Honolulu");
+        Avion avion = new Avion("9", "Singapore", "Brisbane");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_updateAvion_exception_nullNumber() throws Exception {
+        // Arrange
+        String number="1";
+        Avion avion = new Avion(null, "Dubai", "Jeddah");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
+    }
+
+    @Test
+    void test_updateAvion_exception_emptyNumber() throws Exception {
+        // Arrange
+        String number="1";
+        Avion avion = new Avion("", "Dubai", "Jeddah");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
+    }
+
+    @Test
+    void test_updateAvion_returnsInfoAvion_nullFrom() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Bucharest", "Honolulu");
+        Avion avion = new Avion("9", null, "Paris");
+        Avion result =new Avion("9", "Bucharest", "Paris");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
+
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_updateAvion_returnsInfoAvion_nullTo() throws Exception {
+        // Arrange
+        String number="1";
+        Avion entity = new Avion("1", "Bucharest", "Honolulu");
+        Avion avion = new Avion("9", "Colombo", null);
+        Avion result =new Avion("9", "Colombo", "Honolulu");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
+
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+    @Test
+    void test_updateAvion_entityNotFound() throws Exception {
+        // Arrange
+        String number="11";
+        Avion avion = new Avion("11", "Singapore", "Brisbane");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), EntityNotFoundException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 11 was not found");
+        }
+    }
+
+    @Test
+    void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
+        // Arrange
+        String number="1";
+        Avion avion = new Avion("1", "Bucharest", "Honolulu");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), DuplicateException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
+        }
+    }
 }
