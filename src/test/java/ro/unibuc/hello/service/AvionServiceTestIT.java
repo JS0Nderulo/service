@@ -8,6 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.data.AvionRepository;
 import ro.unibuc.hello.dto.InfoAvion;
+import ro.unibuc.hello.exception.EntityNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 //@Tag("IT")
@@ -44,6 +48,40 @@ public class AvionServiceTestIT {
         // Assert
         Assertions.assertEquals(String.format(avionTemplate, "2", "Doha", "Male"), infoAvion.getFlight());
 
+    }
+
+    @Test
+    void test_getAvionInfoByNumber_whenAvionNotFound() {
+        // Arrange
+        String number = "10";
+
+        try {
+            // Act
+            InfoAvion infoAvion = avionService.getAvionInfoByNumber(number);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), EntityNotFoundException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 10 was not found");
+        }
+    }
+
+    @Test
+    void test_getAllAvioane() {
+        // Arrange
+        List<InfoAvion> listInfoAvion=new ArrayList<InfoAvion>();
+
+        InfoAvion infoAvion1 = new InfoAvion(String.format(avionTemplate, "1", "Bucharest", "Honolulu"));
+        InfoAvion infoAvion2 = new InfoAvion(String.format(avionTemplate, "2", "Doha", "Male"));
+
+
+        listInfoAvion.add(infoAvion1);
+        listInfoAvion.add(infoAvion2);
+
+        // Act
+        List<InfoAvion> resListInfoAvioane = avionService.getAllAvioane();
+        // Assert
+        Assertions.assertEquals(listInfoAvion.get(0).getFlight(), resListInfoAvioane.get(0).getFlight());
+        Assertions.assertEquals(listInfoAvion.get(1).getFlight(), resListInfoAvioane.get(1).getFlight());
     }
 
 }
