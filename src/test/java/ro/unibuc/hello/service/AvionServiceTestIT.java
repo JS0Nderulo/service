@@ -144,4 +144,33 @@ public class AvionServiceTestIT {
             Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
         }
     }
+
+    @Test
+    void test_removeAvion_returnsInfoAvion() throws Exception {
+        // Arrange
+        String number = "1";
+        Avion avion = new Avion("1", "Bucharest", "Honolulu");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        // Act
+        InfoAvion resInfoAvion = avionService.removeAvion(number);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_removeAvion_entityNotFound() throws Exception {
+        // Arrange
+        String number = "11";
+
+        try {
+            // Act
+            InfoAvion infoAvion = avionService.removeAvion(number);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), EntityNotFoundException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 11 was not found");
+        }
+    }
 }
