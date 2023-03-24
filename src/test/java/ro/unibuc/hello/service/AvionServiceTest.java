@@ -295,11 +295,11 @@ public class AvionServiceTest {
     @Test
     void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
         // Arrange
-        String number="1";
-        Avion avion = new Avion("1", "Singapore", "Brisbane");
-        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+        String number="2";
+        Avion avionToUpdate = new Avion("2", "Singapore", "Brisbane");
+        Avion avion = new Avion("3", "Singapore", "Brisbane");
 
-        when(mockAvionRepository.findByNumber(any())).thenReturn(avion);
+        when(mockAvionRepository.findByNumber(any())).thenReturn(avionToUpdate);
 
         try {
             // Act
@@ -307,7 +307,7 @@ public class AvionServiceTest {
         } catch (Exception ex) {
             // Assert
             Assertions.assertEquals(ex.getClass(), DuplicateException.class);
-            Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
+            Assertions.assertEquals(ex.getMessage(), "Entity: 3 is duplicate!");
         }
     }
 
