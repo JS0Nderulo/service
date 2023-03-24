@@ -85,6 +85,7 @@ public class AvionServiceTest {
         // Assert
         Assertions.assertEquals(listInfoAvion.get(0).getFlight(), resListInfoAvioane.get(0).getFlight());
         Assertions.assertEquals(listInfoAvion.get(1).getFlight(), resListInfoAvioane.get(1).getFlight());
+        Assertions.assertEquals(listInfoAvion.size(),  resListInfoAvioane.size());
     }
 
     @Test
@@ -277,7 +278,6 @@ public class AvionServiceTest {
     void test_updateAvion_entityNotFound() throws Exception {
         // Arrange
         String number="1";
-        Avion entity = new Avion("1", "Doha", "Bangkok");
         Avion avion = new Avion("2", "Singapore", "Brisbane");
         InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
 
@@ -335,6 +335,7 @@ public class AvionServiceTest {
         // Assert
         Assertions.assertEquals(listInfoAvion.get(0).getFlight(), resInfoAvion.get(0).getFlight());
         Assertions.assertEquals(listInfoAvion.get(1).getFlight(), resInfoAvion.get(1).getFlight());
+        Assertions.assertEquals(listInfoAvion.size(),  resInfoAvion.size());
     }
 
 }

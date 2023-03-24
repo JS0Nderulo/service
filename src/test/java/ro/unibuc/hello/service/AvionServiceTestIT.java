@@ -2,6 +2,7 @@ package ro.unibuc.hello.service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-//@Tag("IT")
+@Tag("IT")
 public class AvionServiceTestIT {
     @Autowired
     AvionRepository avionRepository;
@@ -74,15 +75,22 @@ public class AvionServiceTestIT {
 
         InfoAvion infoAvion1 = new InfoAvion(String.format(avionTemplate, "1", "Bucharest", "Honolulu"));
         InfoAvion infoAvion2 = new InfoAvion(String.format(avionTemplate, "2", "Doha", "Male"));
+        InfoAvion infoAvion3 = new InfoAvion(String.format(avionTemplate, "3", "Viena", "Paris"));
+        InfoAvion infoAvion4 = new InfoAvion(String.format(avionTemplate, "4", "Singapore", "Dubai"));
 
         listInfoAvion.add(infoAvion1);
         listInfoAvion.add(infoAvion2);
+        listInfoAvion.add(infoAvion3);
+        listInfoAvion.add(infoAvion4);
 
         // Act
         List<InfoAvion> resListInfoAvioane = avionService.getAllAvioane();
         // Assert
         Assertions.assertEquals(listInfoAvion.get(0).getFlight(), resListInfoAvioane.get(0).getFlight());
         Assertions.assertEquals(listInfoAvion.get(1).getFlight(), resListInfoAvioane.get(1).getFlight());
+        Assertions.assertEquals(listInfoAvion.get(2).getFlight(), resListInfoAvioane.get(2).getFlight());
+        Assertions.assertEquals(listInfoAvion.get(3).getFlight(), resListInfoAvioane.get(3).getFlight());
+        Assertions.assertEquals(listInfoAvion.size(), resListInfoAvioane.size());
     }
 
     @Test
@@ -148,8 +156,7 @@ public class AvionServiceTestIT {
     void test_removeAvion_returnsInfoAvion() throws Exception {
         // Arrange
         String number = "1";
-        Avion avion = new Avion("1", "Bucharest", "Honolulu");
-        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, "1", "Bucharest", "Honolulu"));
 
         // Act
         InfoAvion resInfoAvion = avionService.removeAvion(number);
@@ -176,7 +183,6 @@ public class AvionServiceTestIT {
     void test_updateAvion_returnsInfoAvion() throws Exception {
         // Arrange
         String number="1";
-        Avion entity = new Avion("1", "Bucharest", "Honolulu");
         Avion avion = new Avion("9", "Singapore", "Brisbane");
         InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
 
@@ -223,11 +229,9 @@ public class AvionServiceTestIT {
     void test_updateAvion_returnsInfoAvion_nullFrom() throws Exception {
         // Arrange
         String number="1";
-        Avion entity = new Avion("1", "Bucharest", "Honolulu");
         Avion avion = new Avion("9", null, "Paris");
         Avion result =new Avion("9", "Bucharest", "Paris");
         InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
-
 
         // Act
         InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
@@ -240,7 +244,6 @@ public class AvionServiceTestIT {
     void test_updateAvion_returnsInfoAvion_nullTo() throws Exception {
         // Arrange
         String number="1";
-        Avion entity = new Avion("1", "Bucharest", "Honolulu");
         Avion avion = new Avion("9", "Colombo", null);
         Avion result =new Avion("9", "Colombo", "Honolulu");
         InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, result.number, result.from, result.to));
@@ -257,7 +260,6 @@ public class AvionServiceTestIT {
         // Arrange
         String number="11";
         Avion avion = new Avion("11", "Singapore", "Brisbane");
-        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
 
         try {
             // Act
@@ -274,7 +276,6 @@ public class AvionServiceTestIT {
         // Arrange
         String number="1";
         Avion avion = new Avion("1", "Bucharest", "Honolulu");
-        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
 
         try {
             // Act
