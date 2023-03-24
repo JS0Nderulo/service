@@ -8,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.data.AvionRepository;
 import ro.unibuc.hello.dto.InfoAvion;
+import ro.unibuc.hello.exception.DuplicateException;
 import ro.unibuc.hello.exception.EntityNotFoundException;
+import ro.unibuc.hello.exception.NullOrEmptyNumberException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,4 +86,62 @@ public class AvionServiceTestIT {
         Assertions.assertEquals(listInfoAvion.get(1).getFlight(), resListInfoAvioane.get(1).getFlight());
     }
 
+    @Test
+    void test_addAvion_returnsInfoAvion() throws Exception {
+        // Arrange
+        Avion avion = new Avion("5", "Copenhaga", "New Delhi");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        // Act
+        InfoAvion resInfoAvion = avionService.addAvion(avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+    }
+
+    @Test
+    void test_addAvion_whenAvionNumberIsDuplicate() throws Exception {
+        // Arrange
+        Avion avion = new Avion("1","Copenhaga", "New Delhi");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.addAvion(avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), DuplicateException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
+        }
+    }
+
+
+    @Test
+    void test_addAvion_whenAvionNumberIsNull() throws Exception {
+        // Arrange
+        Avion avion = new Avion(null,"Doha","Bangkok");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.addAvion(avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
+    }
+
+    @Test
+    void test_addAvion_whenAvionNumberIsEmpty() throws Exception {
+        // Arrange
+        Avion avion = new Avion("","Doha","Bangkok");
+
+        try {
+            // Act
+            InfoAvion resInfoAvion = avionService.addAvion(avion);
+        } catch (Exception ex) {
+            // Assert
+            Assertions.assertEquals(ex.getClass(), NullOrEmptyNumberException.class);
+            Assertions.assertEquals(ex.getMessage(), "Entity: the provided number is null or empty!");
+        }
+    }
 }
