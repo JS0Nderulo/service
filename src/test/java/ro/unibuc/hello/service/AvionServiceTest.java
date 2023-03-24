@@ -193,15 +193,6 @@ public class AvionServiceTest {
 
         when(mockAvionRepository.findByNumber(number)).thenReturn(entity);
 
-        if(avion.getNumber()!=null && !entity.getNumber().equals(avion.getNumber())){
-            entity.setNumber(avion.getNumber());
-        }
-        if(avion.getFrom()!=null && !entity.getFrom().equals(avion.getFrom())){
-            entity.setFrom(avion.getFrom());
-        }
-        if(avion.getTo()!=null && !entity.getTo().equals(avion.getTo())){
-            entity.setTo(avion.getTo());
-        }
         when(mockAvionRepository.save(entity)).thenReturn(avion);
 
         // Act
