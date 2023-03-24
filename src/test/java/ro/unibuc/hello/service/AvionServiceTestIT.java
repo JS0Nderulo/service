@@ -275,7 +275,7 @@ public class AvionServiceTestIT {
     void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
         // Arrange
         String number="1";
-        Avion avion = new Avion("1", "Bucharest", "Honolulu");
+        Avion avion = new Avion("2", "Bucharest", "Honolulu");
 
         try {
             // Act
@@ -283,7 +283,7 @@ public class AvionServiceTestIT {
         } catch (Exception ex) {
             // Assert
             Assertions.assertEquals(ex.getClass(), DuplicateException.class);
-            Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
+            Assertions.assertEquals(ex.getMessage(), "Entity: 2 is duplicate!");
         }
     }
 
