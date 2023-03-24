@@ -75,7 +75,6 @@ public class AvionServiceTestIT {
         InfoAvion infoAvion1 = new InfoAvion(String.format(avionTemplate, "1", "Bucharest", "Honolulu"));
         InfoAvion infoAvion2 = new InfoAvion(String.format(avionTemplate, "2", "Doha", "Male"));
 
-
         listInfoAvion.add(infoAvion1);
         listInfoAvion.add(infoAvion2);
 
@@ -285,5 +284,20 @@ public class AvionServiceTestIT {
             Assertions.assertEquals(ex.getClass(), DuplicateException.class);
             Assertions.assertEquals(ex.getMessage(), "Entity: 1 is duplicate!");
         }
+    }
+
+    @Test
+    void test_fetchAvionByProperty() throws Exception {
+        // Arrange
+        List<InfoAvion> listInfoAvion = new ArrayList<InfoAvion>();
+
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, "2", "Doha", "Male"));
+        listInfoAvion.add(infoAvion);
+        // Act
+        List<InfoAvion> resInfoAvion = avionService.fetchAvionByProperty("Doha",null);
+
+        // Assert
+        Assertions.assertEquals(listInfoAvion.get(0).getFlight(), resInfoAvion.get(0).getFlight());
+        Assertions.assertEquals(listInfoAvion.size(),  resInfoAvion.size());
     }
 }
