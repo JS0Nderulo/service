@@ -299,7 +299,7 @@ public class AvionServiceTest {
         Avion avionToUpdate = new Avion("2", "Singapore", "Brisbane");
         Avion avion = new Avion("3", "Singapore", "Brisbane");
 
-        when(mockAvionRepository.findByNumber(any())).thenReturn(avionToUpdate);
+        when(mockAvionRepository.findByNumber(any())).thenReturn(avion);
 
         try {
             // Act
