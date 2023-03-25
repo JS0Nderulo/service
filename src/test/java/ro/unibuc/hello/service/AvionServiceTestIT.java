@@ -1,9 +1,6 @@
 package ro.unibuc.hello.service;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ro.unibuc.hello.data.Avion;
@@ -28,6 +25,7 @@ public class AvionServiceTestIT {
     private static final String avionTemplate = "%s : %s -> %s";
 
     @BeforeEach
+    @AfterEach
     public void setupDb() {
         avionRepository.deleteAll();
         Avion avion1 = new Avion("1", "Bucharest", "Honolulu");
@@ -44,7 +42,6 @@ public class AvionServiceTestIT {
     void test_getAvionInfoByNumber_returnsInfoAvion(){
         // Arrange
         String number = "2";
-
         // Act
         InfoAvion infoAvion = avionService.getAvionInfoByNumber(number);
 
@@ -188,7 +185,6 @@ public class AvionServiceTestIT {
 
         // Act
         InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
-
         // Assert
         Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
     }
@@ -272,7 +268,7 @@ public class AvionServiceTestIT {
     }
 
     @Test
-    void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
+    void test_updateAvion_whenAvionNumberIsDuplicateException() throws Exception {
         // Arrange
         String number="1";
         Avion avion = new Avion("2", "Bucharest", "Honolulu");
@@ -286,6 +282,20 @@ public class AvionServiceTestIT {
             Assertions.assertEquals(ex.getMessage(), "Entity: 2 is duplicate!");
         }
     }
+
+    @Test
+    void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
+        // Arrange
+        String number="1";
+        Avion avion = new Avion("1", "Bucharest", "Honolulu");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
+   }
 
     @Test
     void test_fetchAvionByProperty() throws Exception {

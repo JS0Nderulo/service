@@ -62,7 +62,7 @@ public class AvionService {
             throw new EntityNotFoundException(number);
         }
         Avion dupEntity = avionRepository.findByNumber(avion.getNumber());
-        if (dupEntity != null && !avion.getNumber().equals(dupEntity.getNumber())) {
+        if (dupEntity != null && !number.equals(dupEntity.getNumber())) {
             throw new DuplicateException(avion.number);
         }
         if(!entity.getNumber().equals(avion.getNumber())){
