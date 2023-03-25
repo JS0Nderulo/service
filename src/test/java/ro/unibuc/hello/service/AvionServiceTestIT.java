@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-//@Tag("IT")
+@Tag("IT")
 public class AvionServiceTestIT {
     @Autowired
     AvionRepository avionRepository;
