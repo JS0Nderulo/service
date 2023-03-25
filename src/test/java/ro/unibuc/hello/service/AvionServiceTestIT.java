@@ -44,7 +44,6 @@ public class AvionServiceTestIT {
     void test_getAvionInfoByNumber_returnsInfoAvion(){
         // Arrange
         String number = "2";
-
         // Act
         InfoAvion infoAvion = avionService.getAvionInfoByNumber(number);
 
@@ -272,7 +271,7 @@ public class AvionServiceTestIT {
     }
 
     @Test
-    void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
+    void test_updateAvion_whenAvionNumberIsDuplicateException() throws Exception {
         // Arrange
         String number="1";
         Avion avion = new Avion("2", "Bucharest", "Honolulu");
@@ -285,6 +284,20 @@ public class AvionServiceTestIT {
             Assertions.assertEquals(ex.getClass(), DuplicateException.class);
             Assertions.assertEquals(ex.getMessage(), "Entity: 2 is duplicate!");
         }
+    }
+
+    @Test
+    void test_updateAvion_whenAvionNumberIsDuplicate() throws Exception {
+        // Arrange
+        String number="1";
+        Avion avion = new Avion("1", "New York", "Istanbul");
+        InfoAvion infoAvion = new InfoAvion(String.format(avionTemplate, avion.number, avion.from, avion.to));
+
+        // Act
+        InfoAvion resInfoAvion = avionService.updateAvion(number,avion);
+
+        // Assert
+        Assertions.assertEquals(infoAvion.getFlight(), resInfoAvion.getFlight());
     }
 
     @Test
