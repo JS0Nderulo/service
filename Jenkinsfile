@@ -28,6 +28,12 @@ pipeline {
                   }
             }
 
+        stage('Docker Compose Execution') {
+            steps{
+            sh "IMAGE_TAG=${env.IMAGE_TAG} docker-compose up -d hello"
+            }
+        }
+
     }
 
 }
