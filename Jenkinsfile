@@ -38,6 +38,7 @@ pipeline {
             steps{
             sh "./gradlew test"
             sh "./gradlew testIT"
+            sh "./gradlew testE2E"
             }
         }
 
