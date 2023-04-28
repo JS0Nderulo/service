@@ -1,5 +1,9 @@
 package ro.unibuc.hello.controller;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,11 +17,16 @@ import ro.unibuc.hello.service.AvionService;
 
 import java.util.List;
 
+import java.util.concurrent.atomic.AtomicLong;
 @Controller
 public class AvionController {
 
     @Autowired
     private AvionService avionService;
+
+    @Autowired
+    MeterRegistry metricsRegistry;
+
     private static final String duplicateExceptionMessage = "An avion entity with the same number already exists so the state of the DB wasn't modified.";
     private static final String entityNotFoundExceptionMessage = "Avion entity with the requested number was not found so the state of the DB wasn't modified.";
     private static final String nullOrEmptyNumberExceptionMessage = "The provided number for the Avion entity is null or empty so the state of the DB wasn't modified.";
