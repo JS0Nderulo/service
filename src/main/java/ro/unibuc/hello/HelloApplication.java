@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import ro.unibuc.hello.data.Avion;
 import ro.unibuc.hello.data.AvionRepository;
-
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
