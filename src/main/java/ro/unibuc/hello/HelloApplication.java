@@ -9,7 +9,7 @@ import ro.unibuc.hello.data.AvionRepository;
 
 import javax.annotation.PostConstruct;
 
-@SpringBootApplication
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
 @EnableMongoRepositories(basePackageClasses = AvionRepository.class)
 public class HelloApplication {
 
