@@ -52,7 +52,10 @@ public class HelloWorldSteps {
 
     public void executeGet(String url) {
         final Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
+        headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
+        headers.put("Connection", "keep-alive");
+        headers.put("Host", "localhost:8080");
+
         final HeaderSetup requestCallback = new HeaderSetup(headers);
         final ResponseErrorHandler errorHandler = new ResponseErrorHandler();
 
