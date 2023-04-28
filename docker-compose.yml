@@ -9,6 +9,7 @@ services:
       ENVIRONMENT_NAME: local
       MONGODB_CONECTION_URL: mongodb://root:example@mongo:27017/
     restart: always
+    network_mode: "host"
   mongo:
     image: mongo:5.0.2
     restart: always
