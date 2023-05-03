@@ -25,6 +25,8 @@ public class HelloWorldController {
     @Autowired
     MeterRegistry metricsRegistry;
 
+    private final AtomicLong counter = new AtomicLong();
+
     @GetMapping("/hello-world")
     @ResponseBody
     @Timed(value = "hello.greeting.time", description = "Time taken to return greeting")
