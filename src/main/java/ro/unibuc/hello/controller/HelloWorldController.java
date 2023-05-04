@@ -2,7 +2,6 @@ package ro.unibuc.hello.controller;
 
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.MeterRegistry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,14 +13,11 @@ import ro.unibuc.hello.dto.Greeting;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 import ro.unibuc.hello.service.HelloWorldService;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 @Controller
 public class HelloWorldController {
 
     @Autowired
     private HelloWorldService helloWorldService;
-
 
 
     @GetMapping("/hello-world")
