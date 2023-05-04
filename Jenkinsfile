@@ -30,8 +30,8 @@ pipeline {
 
         stage('Kubernetes Execution') {
             steps{
-            //sh "IMAGE_TAG=${env.IMAGE_TAG} docker-compose up -d hello"
-            sh 'kubectl apply -f kubernetes/hello.yaml'
+            sh "IMAGE_TAG=${env.IMAGE_TAG} docker-compose up -d hello"
+            //sh 'kubectl apply -f kubernetes/hello.yaml'
             }
         }
 
