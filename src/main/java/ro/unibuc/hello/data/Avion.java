@@ -41,13 +41,4 @@ public class Avion {
     public String getTo() {
         return to;
     }
-
-
-    /*@Override
-    public String toString() {
-        return String.format(
-                "Avion[number='%s', from='%s', to='%s']",
-                id, number, from, to);
-    }
-*/
 }
